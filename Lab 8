@@ -1,0 +1,17 @@
+create database if not exists Employee comment 'BDA LAB HIVE';
+use Employee;
+create external table if not exists Employee (Empl_ID int, Emp_Name String, Designation String, Salary int) row format delimited fields terminated by ',' lines terminated by '\n';
+load data local inpath '/home/meghana/Desktop/employee' overwrite into table Employee;
+select * from Employee;
+create view Employee_view as select * from Employee where Salary>30000;
+select * from Employee_view;
+alter table Employee add columns (Dept_ID int);
+load data local inpath '/home/meghana/Desktop/employee_department' overwrite into table Employee;
+select * from Employee order by Dept_ID;
+select count(*),Dept_ID from Employee where Salary > 30000 group by Dept_ID;
+
+
+create table if not exists Department (Dept_ID int , Dept_name String, Emp_ID int) row format delimited fields terminated by ',' lines terminated by '\n';
+load data local inpath '/home/meghana/Desktop/department' overwrite into table Department;
+select * from Department;
+select e.Empl_ID, e.Emp_Name, e.Designation, e.Salary, e.Dept_ID, d.Dept_Name from Employee e join Department d ON (d.Dept_ID = e.Dept_ID);
